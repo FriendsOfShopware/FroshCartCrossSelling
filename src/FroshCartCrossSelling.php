@@ -4,7 +4,7 @@ namespace Frosh\CartCrossSelling;
 
 use Shopware\Core\Framework\Plugin;
 
-class NfCartCrossSelling extends Plugin
+class FroshCartCrossSelling extends Plugin
 {
 
 }

@@ -10,11 +10,11 @@
     }
   ],
   "extra": {
-    "shopware-plugin-class": "Frosh\\CartCrossSelling\\NfCartCrossSelling",
+    "shopware-plugin-class": "Frosh\\CartCrossSelling\\FroshCartCrossSelling",
     "author": "Friends of Shopware",
     "label": {
       "de-DE": "Zubehör im Warenkorb",
-      "en-GB": "Cross selling in cart "
+      "en-GB": "Cross selling in checkout "
     },
     "description": {
       "de-DE": "",

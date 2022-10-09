@@ -19,7 +19,7 @@
 
 {% block page_checkout_aside_container %}
     {{ parent() }}
-    {% if config('NfCartCrossSelling.config.cartCheckoutFactsActive') %}
+    {% if config('FroshCartCrossSelling.config.cartCheckoutFactsActive') %}
         {% sw_include "@Storefront/storefront/page/checkout/checkout_facts.html.twig" %}
     {% endif %}
 {% endblock %}

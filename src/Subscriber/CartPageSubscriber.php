@@ -27,9 +27,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CartPageSubscriber implements EventSubscriberInterface
 {
-    private const CROSS_SELLING_CONFIG = 'NfCartCrossSelling.config.cartCrossSellingActive';
-    private const CROSS_SELLING_OFF_CANVAS_CONFIG = 'NfCartCrossSelling.config.offCanvasCrossSellingActive';
-    private const PAYMENT_ICONS_CONFIG = 'NfCartCrossSelling.config.paymentIconAlbum';
+    private const CROSS_SELLING_CONFIG = 'FroshCartCrossSelling.config.cartCrossSellingActive';
+    private const CROSS_SELLING_OFF_CANVAS_CONFIG = 'FroshCartCrossSelling.config.offCanvasCrossSellingActive';
+    private const PAYMENT_ICONS_CONFIG = 'FroshCartCrossSelling.config.paymentIconAlbum';
 
     private SalesChannelRepositoryInterface $productRepository;
     private SystemConfigService $systemConfigService;
@@ -100,7 +100,6 @@ class CartPageSubscriber implements EventSubscriberInterface
         if (empty($productIds)) {
             return null;
         }
-
         $criteria = $this->createProductCriteria($context, $productIds);
         $criteria->addFilter(new EqualsAnyFilter('crossSellingAssignedProducts.crossSelling.productId', $productIds));
         $result = $this->productRepository->search($criteria, $context);

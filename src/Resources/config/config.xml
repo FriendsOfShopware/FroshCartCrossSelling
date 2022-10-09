@@ -35,7 +35,7 @@
         <title>Cross-selling slider in checkout</title>
         <input-field type="bool">
             <name>cartCrossSellingActive</name>
-            <label>Display cross-selling in checkout</label>
+            <label>Display cross-selling in cart</label>
             <defaultValue>1</defaultValue>
         </input-field>
         <input-field type="bool">
@@ -80,12 +80,12 @@
         <component name="sw-snippet-field">
             <name>cartCheckoutFact2Title</name>
             <label>Title for checkout fact #2</label>
-            <snippet>checkout.cartCheckoutFact1Title</snippet>
+            <snippet>checkout.cartCheckoutFact2Title</snippet>
         </component>
         <component name="sw-snippet-field">
             <name>cartCheckoutFact2Text</name>
             <label>Text for checkout fact #2</label>
-            <snippet>checkout.cartCheckoutFact1Text</snippet>
+            <snippet>checkout.cartCheckoutFact2Text</snippet>
         </component>
 
         <input-field type="text">
@@ -96,12 +96,12 @@
         <component name="sw-snippet-field">
             <name>cartCheckoutFact3Title</name>
             <label>Title for checkout fact #3</label>
-            <snippet>checkout.cartCheckoutFact1Title</snippet>
+            <snippet>checkout.cartCheckoutFact3Title</snippet>
         </component>
         <component name="sw-snippet-field">
             <name>cartCheckoutFact3Text</name>
             <label>Text for checkout fact #3</label>
-            <snippet>checkout.cartCheckoutFact1Text</snippet>
+            <snippet>checkout.cartCheckoutFact3Text</snippet>
         </component>
     </card>
 </config>

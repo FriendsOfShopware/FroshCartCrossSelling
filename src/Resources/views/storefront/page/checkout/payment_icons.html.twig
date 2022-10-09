@@ -1,19 +1,19 @@
-{% if page.extensions.paymentIcons %}
+{% if page.extensions.paymentIcons.first %}
     <h4 class="my-4">
         {{ "checkout.paymentIconsTitle"|trans }}
     </h4>
-    <div class="checkout-payment-icons {{ config('NfCartCrossSelling.config.paymentIconClassContainer') }}">
+    <div class="checkout-payment-icons {{ config('FroshCartCrossSelling.config.paymentIconClassContainer') }}">
         <style>
             .checkout-payment-icons .payment-icon{
                 display: inline-block;
-                height: {{ config('NfCartCrossSelling.config.paymentIconHeight') }};
+                height: {{ config('FroshCartCrossSelling.config.paymentIconHeight') }};
             }
             .checkout-payment-icons .payment-icon img{
-                max-height: {{ config('NfCartCrossSelling.config.paymentIconHeight') }};
+                max-height: {{ config('FroshCartCrossSelling.config.paymentIconHeight') }};
             }
         </style>
         {% for icon in page.extensions.paymentIcons %}
-            <div class="payment-icon {{ config('NfCartCrossSelling.config.paymentIconClass') }}">
+            <div class="payment-icon {{ config('FroshCartCrossSelling.config.paymentIconClass') }}">
                 <img src="{{ icon.url }}" title="{{ icon.title }}" alt="{{ icon.alt }}" height="100%">
             </div>
         {% endfor %}
