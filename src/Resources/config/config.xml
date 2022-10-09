@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Payment icons bar in checkout</title>
+        <component name="sw-snippet-field">
+            <name>paymentIconsTitle</name>
+            <label>Title for payment icons in checkout</label>
+            <snippet>checkout.paymentIconsTitle</snippet>
+        </component>
+        <component name="sw-entity-single-select">
+            <name>paymentIconAlbum</name>
+            <entity>media_folder</entity>
+            <label>Media folder with payment icons</label>
+            <defaultValue>4e699a2f54264016a85d62611b328ad4</defaultValue>
+        </component>
+        <input-field type="text">
+            <name>paymentIconHeight</name>
+            <label>Height for payment icons</label>
+            <defaultValue>50px</defaultValue>
+        </input-field>
+        <input-field type="text">
+            <name>paymentIconClass</name>
+            <label>CSS Class for payment icons</label>
+            <defaultValue>border rounded m-1 p-2</defaultValue>
+        </input-field>
+        <input-field type="text">
+            <name>paymentIconClassContainer</name>
+            <label>CSS Class for payment icon container</label>
+            <defaultValue>mx-n1</defaultValue>
+        </input-field>
+    </card>
+    <card>
+        <title>Cross-selling slider in checkout</title>
+        <input-field type="bool">
+            <name>cartCrossSellingActive</name>
+            <label>Display cross-selling in checkout</label>
+            <defaultValue>1</defaultValue>
+        </input-field>
+        <input-field type="bool">
+            <name>offCanvasCrossSellingActive</name>
+            <label>Display cross-selling in off canvas</label>
+            <defaultValue>1</defaultValue>
+        </input-field>
+        <component name="sw-snippet-field">
+            <name>cartCrossSellingTitle</name>
+            <label>Title for cross-selling slider in checkout</label>
+            <snippet>checkout.basketCrossSellingTitle</snippet>
+        </component>
+    </card>
+    <card>
+        <title>Checkout facts</title>
+        <input-field type="bool">
+            <name>cartCheckoutFactsActive</name>
+            <label>Display checkout facts in checkout</label>
+            <defaultValue>1</defaultValue>
+        </input-field>
+        <input-field type="text">
+            <name>cartCheckoutFact1Icon</name>
+            <label>Icon for checkout fact #1</label>
+            <defaultValue>package-open</defaultValue>
+        </input-field>
+        <component name="sw-snippet-field">
+            <name>cartCheckoutFact1Title</name>
+            <label>Title for checkout fact #1</label>
+            <snippet>checkout.cartCheckoutFact1Title</snippet>
+        </component>
+        <component name="sw-snippet-field">
+            <name>cartCheckoutFact1Text</name>
+            <label>Text for checkout fact #1</label>
+            <snippet>checkout.cartCheckoutFact1Text</snippet>
+        </component>
+
+        <input-field type="text">
+            <name>cartCheckoutFact2Icon</name>
+            <label>Icon for checkout fact #2</label>
+            <defaultValue>arrow-switch</defaultValue>
+        </input-field>
+        <component name="sw-snippet-field">
+            <name>cartCheckoutFact2Title</name>
+            <label>Title for checkout fact #2</label>
+            <snippet>checkout.cartCheckoutFact1Title</snippet>
+        </component>
+        <component name="sw-snippet-field">
+            <name>cartCheckoutFact2Text</name>
+            <label>Text for checkout fact #2</label>
+            <snippet>checkout.cartCheckoutFact1Text</snippet>
+        </component>
+
+        <input-field type="text">
+            <name>cartCheckoutFact3Icon</name>
+            <label>Icon for checkout fact #3</label>
+            <defaultValue>thumb-up</defaultValue>
+        </input-field>
+        <component name="sw-snippet-field">
+            <name>cartCheckoutFact3Title</name>
+            <label>Title for checkout fact #3</label>
+            <snippet>checkout.cartCheckoutFact1Title</snippet>
+        </component>
+        <component name="sw-snippet-field">
+            <name>cartCheckoutFact3Text</name>
+            <label>Text for checkout fact #3</label>
+            <snippet>checkout.cartCheckoutFact1Text</snippet>
+        </component>
+    </card>
+</config>

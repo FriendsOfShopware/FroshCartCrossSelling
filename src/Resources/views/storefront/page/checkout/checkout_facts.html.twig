@@ -1,0 +1,41 @@
+<div class="checkout-facts">
+    <div class="row p-2 mx-0 checkout-facts-item">
+        <div class="col-2 checkout-facts-item-icon">
+            {% include 'storefront/utilities/icon.html.twig' with {
+                name: config('NfCartCrossSelling.config.cartCheckoutFact1Icon'),
+                size: 'fluid',
+                color: 'dark'
+            } %}
+        </div>
+        <div class="col">
+            <h4 class="checkout-facts-item-header">{{ "checkout.cartCheckoutFact1Title"|trans }}</h4>
+            <div class="checkout-facts-item-content">{{ "checkout.cartCheckoutFact1Text"|trans }}</div>
+        </div>
+    </div>
+    <div class="row p-2 mx-0 checkout-facts-item">
+        <div class="col-2 checkout-facts-item-icon">
+            {% include 'storefront/utilities/icon.html.twig' with {
+                name: config('NfCartCrossSelling.config.cartCheckoutFact2Icon'),
+                size: 'fluid',
+                color: 'dark'
+            } %}
+        </div>
+        <div class="col">
+            <h4 class="checkout-facts-item-header">{{ "checkout.cartCheckoutFact2Title"|trans }}</h4>
+            <div class="checkout-facts-item-content">{{ "checkout.cartCheckoutFact2Text"|trans }}</div>
+        </div>
+    </div>
+    <div class="row p-2 mx-0 checkout-facts-item">
+        <div class="col-2 checkout-facts-item-icon">
+            {% include 'storefront/utilities/icon.html.twig' with {
+                name: config('NfCartCrossSelling.config.cartCheckoutFact3Icon'),
+                size: 'fluid',
+                color: 'dark'
+            } %}
+        </div>
+        <div class="col">
+            <h4 class="checkout-facts-item-header">{{ "checkout.cartCheckoutFact3Title"|trans }}</h4>
+            <div class="checkout-facts-item-content">{{ "checkout.cartCheckoutFact3Text"|trans }}</div>
+        </div>
+    </div>
+</div>

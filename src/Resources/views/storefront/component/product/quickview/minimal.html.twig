@@ -1,0 +1,13 @@
+{% sw_extends '@Storefront/storefront/component/product/quickview/minimal.html.twig' %}
+
+{% block component_product_quickview_minimal_product_number %}
+    {% set lineItem = page.product.extensions.lineItem %}
+
+    {{ block('page_checkout_item_info_variant_characteristics', '@Storefront/storefront/page/checkout/checkout-item.html.twig') }}
+
+    {% sw_include '@Storefront/storefront/component/product/feature/list.html.twig' with {
+        'features': lineItem.payload.features
+    } %}
+
+    {{ parent() }}
+{% endblock %}

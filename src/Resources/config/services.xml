@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true" autoconfigure="true">
+            <bind key="Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface $productRepository"
+                  type="service"
+                  id="sales_channel.product.repository"/>
+            <bind key="Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface $mediaRepository"
+                  type="service"
+                  id="media.repository"/>
+            <bind key="Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface $productStreamRepository"
+                  type="service"
+                  id="product_stream.repository"/>
+            <bind key="Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition $productDefinition"
+                  type="service"
+                  id="Shopware\Core\Content\Product\ProductDefinition"/>
+        </defaults>
+        <prototype namespace="Frosh\CartCrossSelling\" resource="../../*"
+                   exclude="../../{DependencyInjection,Entity,Tests,Kernel.php}"/>
+        <service id="Frosh\CartCrossSelling\Product\ProductDetailRoute"
+                 decorates="Shopware\Core\Content\Product\SalesChannel\Detail\ProductDetailRoute">
+            <argument type="service" id="Frosh\CartCrossSelling\Product\ProductDetailRoute.inner"/>
+        </service>
+    </services>
+</container>

@@ -1,0 +1,31 @@
+{% set config = {
+    'products': {
+        'value': page.extensions.crossSelling
+    },
+    'boxLayout': {
+        'value': 'minimal'
+    },
+    'elMinWidth': {
+        'value': '200px'
+    },
+    'navigation': {
+        'value': true
+    },
+    'displayMode': {
+        'value': 'minimal'
+    },
+    'verticalAlign': {
+        'value': 'top'
+    },
+} %}
+ {% sw_include "@Storefront/storefront/element/cms-element-product-slider.html.twig" with {
+     sliderConfig: config,
+     element: {
+         'data': {
+             'products': {
+                 elements: page.extensions.crossSelling
+             }
+         },
+         type: 'product-slider'
+     }
+ } %}

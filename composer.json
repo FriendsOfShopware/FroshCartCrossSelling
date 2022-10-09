@@ -1,0 +1,36 @@
+{
+  "name": "frosh/cart-cross-selling",
+  "description": "Cross selling in the shopping cart",
+  "version": "1.0.0",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Friends of Shopware"
+    }
+  ],
+  "extra": {
+    "shopware-plugin-class": "Frosh\\CartCrossSelling\\NfCartCrossSelling",
+    "author": "Friends of Shopware",
+    "label": {
+      "de-DE": "Zubehör im Warenkorb",
+      "en-GB": "Cross selling in cart "
+    },
+    "description": {
+      "de-DE": "",
+      "en-GB": ""
+    }
+  },
+  "require": {
+    "php": ">= 7.2"
+  },
+  "require-dev": {
+    "shopware/core": "*",
+    "shopware/storefront": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Frosh\\CartCrossSelling\\": "src/"
+    }
+  }
+}

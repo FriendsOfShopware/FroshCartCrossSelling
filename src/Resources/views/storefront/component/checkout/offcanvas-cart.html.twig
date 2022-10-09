@@ -1,0 +1,13 @@
+{% sw_extends '@Storefront/storefront/component/checkout/offcanvas-cart.html.twig' %}
+
+{% block component_offcanvas_summary %}
+    {{ parent() }}
+    {% if page.extensions.crossSelling %}
+    <div class="checkout-cross-selling">
+        <h4 class="text-center">
+            {{ "checkout.basketCrossSellingTitle"|trans }}
+        </h4>
+        {% sw_include "@Storefront/storefront/page/checkout/cross_selling.html.twig" %}
+    </div>
+    {% endif %}
+{% endblock %}
