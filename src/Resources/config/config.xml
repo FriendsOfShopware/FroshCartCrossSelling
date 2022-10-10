@@ -50,6 +50,19 @@
         </component>
     </card>
     <card>
+        <title>Feature set and options in quick-view</title>
+        <input-field type="bool">
+            <name>featureSetQuickViewActive</name>
+            <label>Feature set in quick-view</label>
+            <defaultValue>1</defaultValue>
+        </input-field>
+        <input-field type="bool">
+            <name>optionsQuickViewActive</name>
+            <label>Options in quick-view</label>
+            <defaultValue>1</defaultValue>
+        </input-field>
+    </card>
+    <card>
         <title>Checkout facts</title>
         <input-field type="bool">
             <name>cartCheckoutFactsActive</name>
