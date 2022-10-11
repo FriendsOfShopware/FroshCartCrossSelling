@@ -52,8 +52,13 @@ class ProductDetailRoute extends AbstractProductDetailRoute
         $lineItem = new LineItem($product->getId(), LineItem::PRODUCT_LINE_ITEM_TYPE, $product->getId());
         $product->addExtension('lineItem', $lineItem);
 
-        // Build product features and add them to the line item
-        $this->buildProductFeatures($product, $lineItem, $context);
+        if ($this->systemConfigService->getBool(
+            'FroshCartCrossSelling.config.featureSetQuickViewActive',
+            $context->getSalesChannelId()
+        )) {
+            // Build product features and add them to the line item
+            $this->buildProductFeatures($product, $lineItem, $context);
+        }
 
         if ($this->systemConfigService->getBool(
             'FroshCartCrossSelling.config.optionsQuickViewActive',
