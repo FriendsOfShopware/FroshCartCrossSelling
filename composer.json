@@ -1,7 +1,7 @@
 {
   "name": "frosh/cart-cross-selling",
   "description": "Cross selling in the shopping cart",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "shopware-platform-plugin",
   "license": "MIT",
   "authors": [
@@ -14,7 +14,7 @@
     "author": "Friends of Shopware",
     "label": {
       "de-DE": "Zubehör im Warenkorb",
-      "en-GB": "Cross selling in checkout "
+      "en-GB": "Cross selling in checkout"
     },
     "description": {
       "de-DE": "",
