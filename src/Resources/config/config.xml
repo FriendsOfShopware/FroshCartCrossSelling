@@ -13,7 +13,7 @@
             <name>paymentIconAlbum</name>
             <entity>media_folder</entity>
             <label>Media folder with payment icons</label>
-            <defaultValue>4e699a2f54264016a85d62611b328ad4</defaultValue>
+            <defaultValue></defaultValue>
         </component>
         <input-field type="text">
             <name>paymentIconHeight</name>
@@ -28,7 +28,7 @@
         <input-field type="text">
             <name>paymentIconClassContainer</name>
             <label>CSS Class for payment icon container</label>
-            <defaultValue>mx-n1</defaultValue>
+            <defaultValue>mx-n1 mb-1</defaultValue>
         </input-field>
     </card>
     <card>

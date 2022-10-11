@@ -5,12 +5,7 @@
     <div class="checkout-recommendations-container">
         <div class="container">
             {% if page.extensions.crossSelling.first %}
-                <div class="checkout-cross-selling col-md-12 pt-4 px-0 mb-2">
-                    <h4 class="my-4">
-                        {{ "checkout.basketCrossSellingTitle"|trans }}
-                    </h4>
-                    {% sw_include "@Storefront/storefront/page/checkout/cross_selling.html.twig" %}
-                </div>
+                {% sw_include "@Storefront/storefront/page/checkout/cart/cross_selling.html.twig" %}
             {% endif %}
             {% sw_include "@Storefront/storefront/page/checkout/payment_icons.html.twig" %}
         </div>
