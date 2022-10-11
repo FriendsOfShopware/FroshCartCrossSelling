@@ -1,0 +1,87 @@
+store:
+    availabilities:
+        - German
+        - International
+    default_locale: en_GB
+    localizations:
+        - de_DE
+        - en_GB
+    categories:
+        - Produktdarstellung
+        - ConversionOptimierung
+    type: extension
+    icon: src/Resources/store/icon.png
+    automatic_bugfix_version_compatibility: true
+    description:
+        de: file:src/Resources/store/de.md
+        en: file:src/Resources/store/en.md
+    installation_manual:
+        de: file:src/Resources/store/de_manual.md
+        en: file:src/Resources/store/en_manual.md
+    tags:
+        de:
+            - Conversion
+            - Cross Selling
+            - Checkout
+        en:
+            - Conversion
+            - Cross Selling
+            - Checkout
+    videos:
+        de: []
+        en: []
+    highlights:
+        de: []
+        en: []
+    features:
+        de: []
+        en: []
+    faq:
+        de: []
+        en: []
+    images:
+        - file: src/Resources/store/img-0.png
+          activate:
+              de: true
+              en: true
+          preview:
+              de: true
+              en: true
+          priority: 0
+        - file: src/Resources/store/img-1.png
+          activate:
+              de: true
+              en: true
+          preview:
+              de: false
+              en: false
+          priority: 0
+        - file: src/Resources/store/img-2.png
+          activate:
+              de: true
+              en: true
+          preview:
+              de: false
+              en: false
+          priority: 0
+        - file: src/Resources/store/img-3.png
+          activate:
+              de: true
+              en: true
+          preview:
+              de: false
+              en: false
+          priority: 0
+        - file: src/Resources/store/img-4.png
+          activate:
+              de: true
+              en: true
+          preview:
+              de: false
+              en: false
+          priority: 0
+build:
+    zip:
+        assets:
+            enable_es_build_for_admin: true
+            enable_es_build_for_storefront: true
