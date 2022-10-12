@@ -1,9 +1,12 @@
+{% if boxLayout is not defined %}
+    {% set boxLayout = 'minimal' %}
+{% endif %}
 {% set config = {
     'products': {
         'value': page.extensions.crossSelling
     },
     'boxLayout': {
-        'value': 'minimal'
+        'value': boxLayout
     },
     'elMinWidth': {
         'value': '200px'
@@ -12,7 +15,7 @@
         'value': true
     },
     'displayMode': {
-        'value': 'minimal'
+        'value': 'small'
     },
     'verticalAlign': {
         'value': 'top'
