@@ -1,3 +1,16 @@
 .is-act-cartpage .checkout .checkout-aside-container{
     background-color: #fff;
 }
+.offcanvas-sticky-buttons{
+    .cart-offcanvas{
+        .cart-offcanvas {
+            overflow:hidden;
+        }
+        .offcanvas-content-container {
+            overflow-y:auto;
+            height:calc(100% - 170px);
+            padding-bottom:0;
+        }
+    }
+}
+

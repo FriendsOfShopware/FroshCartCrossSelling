@@ -13,7 +13,6 @@
             <name>paymentIconAlbum</name>
             <entity>media_folder</entity>
             <label>Media folder with payment icons</label>
-            <defaultValue></defaultValue>
         </component>
         <input-field type="text">
             <name>paymentIconHeight</name>
@@ -48,6 +47,14 @@
             <label>Title for cross-selling slider in checkout</label>
             <snippet>checkout.basketCrossSellingTitle</snippet>
         </component>
+    </card>
+    <card>
+        <title>Sticky-buttons in off-canvas-cart</title>
+        <input-field type="bool">
+            <name>offCanvasStickyButtonsActive</name>
+            <label>Active</label>
+            <defaultValue>1</defaultValue>
+        </input-field>
     </card>
     <card>
         <title>Feature set and options in quick-view</title>

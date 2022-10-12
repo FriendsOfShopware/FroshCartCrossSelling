@@ -1,8 +1,36 @@
 {% sw_extends '@Storefront/storefront/component/checkout/offcanvas-cart.html.twig' %}
-
+{% if config('FroshCartCrossSelling.config.offCanvasStickyButtonsActive') %}
+ {% set offCanvasStickyButtonsActive = config('FroshCartCrossSelling.config.offCanvasStickyButtonsActive') %}
+{% endif %}
 {% block component_offcanvas_summary %}
     {{ parent() }}
     {% if page.extensions.crossSelling %}
         {% sw_include "@Storefront/storefront/component/checkout/cross_selling.html.twig" %}
+    {% endif %}
+{% endblock %}
+
+{% block component_offcanvas_cart_actions %}
+    {% if offCanvasStickyButtonsActive %}
+        {% block component_offcanvas_cart_actions_promotion %}
+            {{ parent() }}
+        {% endblock %}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block utilities_offcanvas_content_container %}
+    {{ parent() }}
+    {% if offCanvasStickyButtonsActive %}
+        {% set isCartNotEmpty = (page.cart.lineItems|length > 0) %}
+        <div class="offcanvas-cart-actions container">
+            <div class="offcanvas-cart-actions">
+                {{ block('component_offcanvas_cart_actions_cart', '@Storefront/storefront/component/checkout/offcanvas-cart.html.twig') }}
+            </div>
+
+            <div class="row" style="padding: 20px;">
+                {{ block('component_offcanvas_cart_actions_checkout', '@Storefront/storefront/component/checkout/offcanvas-cart.html.twig') }}
+            </div>
+        </div>
     {% endif %}
 {% endblock %}
