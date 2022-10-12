@@ -1,7 +1,7 @@
 {
     "name": "frosh/cart-cross-selling",
     "description": "Cross selling in the shopping cart",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "type": "shopware-platform-plugin",
     "license": "MIT",
     "authors": [

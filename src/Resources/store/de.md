@@ -12,6 +12,8 @@ Der aktuelle Funktionsumfang besteht aus:
     *   Zeigt Zahlungsarten-Icons im Warnkorb-Footer.
 *   Feature-Set in Quick-view 
     *   Zeigt den Feature-Set und die Optionen des Artikels im Checkout-Qick-View an.
+*   (Neu) Sticky-Buttons im Off-Canvas-Warenkorb
+    *   Macht die Checkout-Buttons in Off-Canvas sticky. (PayPal- und Amazon-Buttons werden nicht unterstützt.)
 
 Link to repository: [https://github.com/FriendsOfShopware/FroshCartCrossSelling](https://github.com/FriendsOfShopware/FroshCartCrossSelling)
 

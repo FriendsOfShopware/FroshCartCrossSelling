@@ -4,14 +4,16 @@ All functions can be controlled via the app settings.
 
 The current range of functions are:
 
-* Cross selling
+* Cross-selling
     * Adds a cross-selling slider in the cart and offcanvas menu.
-* Checkout Facts
+* Checkout facts
     * Adds a list of benefits of buying online under the checkout button.
 * Payment icons
     * Shows payment method icons in cart footer.
-* Feature set in Quick-view
+* Feature set in quick-view
     * Displays the item's feature set and options in the checkout quick view.
+* (New) Sticky-buttons in off-canvas cart
+    * Makes the checkout buttons in off-canvas sticky. (PayPal and Amazon buttons are not supported.)
 
 Link to repository: [https://github.com/FriendsOfShopware/FroshCartCrossSelling](https://github.com/FriendsOfShopware/FroshCartCrossSelling)
 
