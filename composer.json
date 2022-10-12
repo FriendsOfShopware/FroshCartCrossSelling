@@ -1,32 +1,40 @@
 {
-  "name": "frosh/cart-cross-selling",
-  "description": "Cross selling in the shopping cart",
-  "version": "0.1.0",
-  "type": "shopware-platform-plugin",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Friends of Shopware"
-    }
-  ],
-  "extra": {
-    "shopware-plugin-class": "Frosh\\CartCrossSelling\\FroshCartCrossSelling",
-    "author": "Friends of Shopware",
-    "label": {
-      "de-DE": "Zubehör im Warenkorb",
-      "en-GB": "Cross selling in checkout"
+    "name": "frosh/cart-cross-selling",
+    "description": "Cross selling in the shopping cart",
+    "version": "0.1.0",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Friends of Shopware"
+        }
+    ],
+    "extra": {
+        "shopware-plugin-class": "Frosh\\CartCrossSelling\\FroshCartCrossSelling",
+        "author": "Friends of Shopware",
+        "label": {
+            "de-DE": "Zubehör im Warenkorb",
+            "en-GB": "Cross selling in checkout"
+        },
+        "description": {
+            "de-DE": "Mit diesem Plugin können Sie die Conversion in Ihrem Shopware 6 Shop erhöhen.\nDas bedeutet mehr Umsatz und mehr Gewinn für den Shop-Betreiber.\nAlle Funktionen können über die App-Einstellungen gesteuert werden.",
+            "en-GB": "With this plugin you can increase the conversion in your Shopware 6 shop.\nThat means more sales and more profit for the shop owner.\nAll functions can be controlled via the app settings."
+        },
+        "manufacturerLink": {
+            "de-DE": "https://store.shopware.com/friends-of-shopware.html",
+            "en-GB": "https://store.shopware.com/en/friends-of-shopware.html"
+        },
+        "supportLink": {
+            "de-DE": "https://github.com/FriendsOfShopware/FroshCartCrossSelling/issues",
+            "en-GB": "https://github.com/FriendsOfShopware/FroshCartCrossSelling/issues"
+        }
     },
-    "description": {
-      "de-DE": "",
-      "en-GB": ""
+    "require": {
+        "shopware/core": "~6.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Frosh\\CartCrossSelling\\": "src/"
+        }
     }
-  },
-  "require": {
-    "shopware/core": "~6.4.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "Frosh\\CartCrossSelling\\": "src/"
-    }
-  }
 }
