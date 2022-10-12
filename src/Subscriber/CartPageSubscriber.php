@@ -101,6 +101,7 @@ class CartPageSubscriber implements EventSubscriberInterface
             return null;
         }
         $criteria = $this->createProductCriteria($context, $productIds);
+        $criteria->addFilter(new EqualsFilter('crossSellingAssignedProducts.crossSelling.active', true));
         $criteria->addFilter(new EqualsAnyFilter('crossSellingAssignedProducts.crossSelling.productId', $productIds));
         $result = $this->productRepository->search($criteria, $context);
 
