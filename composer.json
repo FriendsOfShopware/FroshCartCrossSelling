@@ -17,8 +17,8 @@
             "en-GB": "Cross selling in checkout"
         },
         "description": {
-            "de-DE": "Mit diesem Plugin können Sie die Conversion in Ihrem Shopware 6 Shop erhöhen.\nDas bedeutet mehr Umsatz und mehr Gewinn für den Shop-Betreiber.",
-            "en-GB": "With this plugin you can increase the conversion in your Shopware 6 shop.\nThat means more sales and more profit for the shop owner."
+            "de-DE": "Mit diesem Plugin können Sie die Conversion in Ihrem Shopware 6 Shop erhöhen.\nDas bedeutet mehr Umsatz und mehr Gewinn für den Shop-Betreiber mit diesem Plugin.",
+            "en-GB": "With this plugin you can increase the conversion in your Shopware 6 shop.\nThat means more sales and more profit for the shop owner. All functions can be aktivate via the settings.\n"
         },
         "manufacturerLink": {
             "de-DE": "https://store.shopware.com/friends-of-shopware.html",
