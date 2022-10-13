@@ -1,6 +1,10 @@
-<div class="checkout-cross-selling col-md-12 pt-4 px-0 mb-2">
-    <h4 class="my-4">
-        {{ "checkout.basketCrossSellingTitle"|trans }}
-    </h4>
-    {% sw_include "@Storefront/storefront/page/checkout/cross_selling.html.twig" %}
-</div>
+{% if page.extensions.crossSelling.first %}
+    <div class="checkout-cross-selling col-md-12 px-0 mb-2">
+        <h4 class="my-4">
+            {{ "checkout.basketCrossSellingTitle"|trans }}
+        </h4>
+        {% sw_include "@Storefront/storefront/page/checkout/cross_selling.html.twig" with {
+            'products': page.extensions.crossSelling
+        } %}
+    </div>
+{% endif %}

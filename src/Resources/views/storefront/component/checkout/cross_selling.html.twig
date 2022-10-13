@@ -1,6 +1,9 @@
 <div class="checkout-cross-selling mb-3">
     <h4 class="text-center">
-        {{ "checkout.basketCrossSellingTitle"|trans }}
+        {{ "checkout.offCanvasCrossSellingTitle"|trans }}
     </h4>
-    {% sw_include "@Storefront/storefront/page/checkout/cross_selling.html.twig" with { 'boxLayout': 'small' } %}
+    {% sw_include "@Storefront/storefront/page/checkout/cross_selling.html.twig" with {
+        'products': page.extensions.crossSelling,
+        'boxLayout': 'small'
+    } %}
 </div>

@@ -3,7 +3,7 @@
 {% endif %}
 {% set config = {
     'products': {
-        'value': page.extensions.crossSelling
+        'value': products
     },
     'boxLayout': {
         'value': boxLayout
@@ -26,7 +26,7 @@
      element: {
          'data': {
              'products': {
-                 elements: page.extensions.crossSelling
+                 elements: products
              }
          },
          type: 'product-slider'
