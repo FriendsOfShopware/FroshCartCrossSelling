@@ -2,25 +2,14 @@
 
 namespace Frosh\CartCrossSelling\Subscriber;
 
+use Frosh\CartCrossSelling\Service\CrossSellingService;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
-use Shopware\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingEntity;
-use Shopware\Core\Content\Product\ProductEntity;
-use Shopware\Core\Content\Product\SalesChannel\ProductCloseoutFilter;
-use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
-use Shopware\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Parser\QueryStringParser;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\CountSorting;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\Checkout\Cart\CheckoutCartPageLoadedEvent;
@@ -34,25 +23,19 @@ class CartPageSubscriber implements EventSubscriberInterface
     private const CROSS_SELLING_BUY_AGAIN_CONFIG = 'FroshCartCrossSelling.config.buyAgainCrossSellingActive';
     private const PAYMENT_ICONS_CONFIG = 'FroshCartCrossSelling.config.paymentIconAlbum';
 
-    private SalesChannelRepositoryInterface $productRepository;
+    private CrossSellingService $crossSellingService;
     private SystemConfigService $systemConfigService;
     private EntityRepositoryInterface $mediaRepository;
-    private EntityRepositoryInterface $productStreamRepository;
-    private EntityDefinition $productDefinition;
 
     public function __construct(
-        SalesChannelRepositoryInterface $productRepository,
-        EntityRepositoryInterface       $productStreamRepository,
-        EntityRepositoryInterface       $mediaRepository,
-        EntityDefinition                $productDefinition,
-        SystemConfigService             $systemConfigService
+        CrossSellingService $crossSellingService,
+        EntityRepositoryInterface $mediaRepository,
+        SystemConfigService $systemConfigService
     )
     {
-        $this->systemConfigService = $systemConfigService;
-        $this->productRepository = $productRepository;
-        $this->productStreamRepository = $productStreamRepository;
+        $this->crossSellingService = $crossSellingService;
         $this->mediaRepository = $mediaRepository;
-        $this->productDefinition = $productDefinition;
+        $this->systemConfigService = $systemConfigService;
     }
 
     public static function getSubscribedEvents(): array
@@ -68,24 +51,38 @@ class CartPageSubscriber implements EventSubscriberInterface
         $context = $event->getSalesChannelContext();
         $page = $event->getPage();
         $cart = $page->getCart();
+
+        $page->addExtension('paymentIcons', $this->getPaymentIcons($context));
+
+        $productIds = $this->getProductIds($cart);
+        if (empty($productIds)) {
+            return;
+        }
         if ($this->systemConfigService->getBool(self::CROSS_SELLING_CONFIG, $context->getSalesChannelId())) {
-            $page->addExtension('crossSelling', $this->getCrossSellingProducts($context, $cart));
+            $crossSelling = $this->crossSellingService->getCrossSellingProducts($context, $productIds);
+            $page->addExtension('crossSelling', $crossSelling);
         }
         if ($this->systemConfigService->getBool(self::CROSS_SELLING_BUY_AGAIN_CONFIG, $context->getSalesChannelId())) {
-            $page->addExtension('buyAgain', $this->getBuyAgainProducts($context, $cart));
+            $buyAgain = $this->crossSellingService->getBuyAgainProducts($context, $productIds);
+            $page->addExtension('buyAgain', $buyAgain);
         }
-        if ($page->hasExtension('crossSelling') && $page->hasExtension('buyAgain')) {
-            $this->dontRepeatOnFirstPage($page->getExtension('crossSelling'), $page->getExtension('buyAgain'));
+        if (isset($crossSelling) && isset($buyAgain)) {
+            $this->dontRepeatOnFirstPage($crossSelling, $buyAgain);
         }
-        $page->addExtension('paymentIcons', $this->getPaymentIcons($context));
     }
 
     public function onOffCanvas(OffcanvasCartPageLoadedEvent $event): void
     {
         $context = $event->getSalesChannelContext();
         $cart = $event->getPage()->getCart();
+
+        $productIds = $this->getProductIds($cart);
+        if (empty($productIds)) {
+            return;
+        }
         if ($this->systemConfigService->getBool(self::CROSS_SELLING_OFF_CANVAS_CONFIG, $context->getSalesChannelId())) {
-            $event->getPage()->addExtension('crossSelling', $this->getCrossSellingProducts($context, $cart));
+            $crossSelling = $this->crossSellingService->getCrossSellingProducts($context, $productIds);
+            $event->getPage()->addExtension('crossSelling', $crossSelling);
         }
     }
 
@@ -103,58 +100,7 @@ class CartPageSubscriber implements EventSubscriberInterface
         return $this->mediaRepository->search($criteria, $context->getContext())->getEntities();
     }
 
-    private function getCrossSellingProducts(SalesChannelContext $context, Cart $cart): ?EntityCollection
-    {
-        $productIds = $this->getProductIds($cart);
-        if (empty($productIds)) {
-            return null;
-        }
-        $criteria = $this->createProductCriteria($context, $productIds);
-        $this->addCrossSellingProducts($criteria, $context, $productIds);
-        $result = $this->productRepository->search($criteria, $context);
-
-        if ($result->first() === null) {
-            $criteria = $this->createProductCriteria($context, $productIds);
-            $this->addProductStreamFilters($criteria, $productIds, $context->getContext());
-            $result = $this->productRepository->search($criteria, $context);
-        }
-
-        if ($result->first() === null) {
-            // getCrossSellingSiblings
-            $criteria = $this->createProductCriteria($context, $productIds);
-            $criteria->addFilter(new EqualsFilter('crossSellingAssignedProducts.crossSelling.active', true));
-            $criteria->addFilter(new EqualsAnyFilter('crossSellingAssignedProducts.crossSelling.productId', $productIds));
-            $result = $this->productRepository->search($criteria, $context);
-        }
-
-        if ($result->first() === null) {
-            return null;
-        }
-
-        return $result->getEntities();
-    }
-
-    private function addCrossSellingProducts(Criteria $criteria, SalesChannelContext $context, array $productIds): void
-    {
-        $search = new Criteria();
-        $search->addAssociation('crossSellings.assignedProducts');
-        $search->addFilter(new EqualsFilter('crossSellings.active', true));
-        $search->addFilter(new EqualsAnyFilter('id', $productIds));
-        $result = $this->productRepository->search($search, $context);
-
-        // getCrossSellingSAssignedProductIds
-        $ids = array_merge(...array_values($result->fmap(static function (ProductEntity $entity) {
-            return array_merge(...array_values($entity->getCrossSellings()->fmap(
-                static function (ProductCrossSellingEntity $entity) {
-                    return $entity->getAssignedProducts()->getIds();
-                }
-            )));
-        })));
-
-        $criteria->addFilter(new EqualsAnyFilter('id', $ids));
-    }
-
-    private function getProductIds(Cart $cart): array
+    private static function getProductIds(Cart $cart): array
     {
         $products = $cart->getLineItems()->filterFlatByType(LineItem::PRODUCT_LINE_ITEM_TYPE);
         return array_map(
@@ -163,78 +109,7 @@ class CartPageSubscriber implements EventSubscriberInterface
         );
     }
 
-    private function createProductCriteria(SalesChannelContext $context, array $excludeIds): Criteria
-    {
-        $criteria = new Criteria();
-        $criteria->setLimit(100);
-        $criteria->addAssociation('manufacturer')
-            ->addAssociation('options.group');
-
-        if ($this->systemConfigService->getBool(
-            'core.listing.hideCloseoutProductsWhenOutOfStock',
-            $context->getSalesChannelId()
-        )) {
-            $criteria->addFilter(new ProductCloseoutFilter());
-        }
-        $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
-            new EqualsAnyFilter('id', $excludeIds)
-        ]));
-        $criteria->addSorting(
-            new FieldSorting('markAsTopseller', FieldSorting::DESCENDING),
-        );
-        if (class_exists(CountSorting::class)) {
-            $criteria->addSorting(
-                new CountSorting('id', FieldSorting::DESCENDING)
-            );
-        }
-        return $criteria;
-    }
-
-    private function addProductStreamFilters(Criteria $criteria, array $productIds, Context $context): void
-    {
-        $streamCriteria = new Criteria();
-        $streamCriteria->addFilter(new EqualsFilter('productCrossSellings.active', true));
-        $streamCriteria->addFilter(new EqualsAnyFilter('productCrossSellings.productId', $productIds));
-        $result = $this->productStreamRepository->search($streamCriteria, $context);
-        if ($result->first() === null) {
-            return;
-        }
-        $filters = [];
-        foreach ($result->getEntities() as $stream) {
-            if (empty($stream->getApiFilter()[0]['type'])) {
-                continue;
-            }
-            $filters[] = QueryStringParser::fromArray(
-                $this->productDefinition,
-                $stream->getApiFilter()[0],
-                new SearchRequestException
-            );
-        }
-        $criteria->addFilter(new MultiFilter(MultiFilter::CONNECTION_OR, $filters));
-    }
-
-    private function addPCustomerOrdersFilters(Criteria $criteria, SalesChannelContext $context): void
-    {
-        $customerId = $context->getCustomer()->getId();
-        $criteria->addFilter(new EqualsFilter('orderLineItems.order.orderCustomer.customerId', $customerId));
-    }
-
-    private function getBuyAgainProducts(SalesChannelContext $context, Cart $cart): ?EntityCollection
-    {
-        $productIds = $this->getProductIds($cart);
-        if (empty($productIds)) {
-            return null;
-        }
-        $criteria = $this->createProductCriteria($context, $productIds);
-        $this->addPCustomerOrdersFilters($criteria, $context);
-        $result = $this->productRepository->search($criteria, $context);
-        if ($result->first() === null) {
-            return null;
-        }
-        return $result->getEntities();
-    }
-
-    private function dontRepeatOnFirstPage(EntityCollection $first, EntityCollection $second)
+    private static function dontRepeatOnFirstPage(EntityCollection $first, EntityCollection $second)
     {
         $firstPageIds = $first->slice(0, 5)->getIds();
         $secondFirstPageIds = $second->slice(0, 5)->getIds();
