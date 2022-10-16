@@ -53,6 +53,16 @@
             <snippet>checkout.buyAgainCrossSellingTitle</snippet>
         </component>
         <input-field type="bool">
+            <name>alsoBoughtCrossSellingActive</name>
+            <label>Display also-bought in cart</label>
+            <defaultValue>1</defaultValue>
+        </input-field>
+        <component name="sw-snippet-field">
+            <name>alsoBoughtCrossSellingTitle</name>
+            <label>Title for also-bought slider in cart</label>
+            <snippet>checkout.alsoBoughtCrossSellingTitle</snippet>
+        </component>
+        <input-field type="bool">
             <name>offCanvasCrossSellingActive</name>
             <label>Display cross-selling in off canvas</label>
             <defaultValue>1</defaultValue>

@@ -1,0 +1,10 @@
+{% if page.extensions.alsoBought.first %}
+    <div class="checkout-buy-again col-md-12 pt-4 px-0 mb-2">
+        <h4 class="my-4">
+            {{ "checkout.alsoBoughtCrossSellingTitle"|trans }}
+        </h4>
+        {% sw_include "@Storefront/storefront/page/checkout/cross_selling.html.twig" with {
+            'products': page.extensions.alsoBought
+        } %}
+    </div>
+{% endif %}

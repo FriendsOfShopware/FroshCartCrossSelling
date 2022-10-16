@@ -21,6 +21,7 @@ class CartPageSubscriber implements EventSubscriberInterface
     private const CROSS_SELLING_CONFIG = 'FroshCartCrossSelling.config.cartCrossSellingActive';
     private const CROSS_SELLING_OFF_CANVAS_CONFIG = 'FroshCartCrossSelling.config.offCanvasCrossSellingActive';
     private const CROSS_SELLING_BUY_AGAIN_CONFIG = 'FroshCartCrossSelling.config.buyAgainCrossSellingActive';
+    private const CROSS_SELLING_ALSO_BOUGHT_CONFIG = 'FroshCartCrossSelling.config.alsoBoughtCrossSellingActive';
     private const PAYMENT_ICONS_CONFIG = 'FroshCartCrossSelling.config.paymentIconAlbum';
 
     private CrossSellingService $crossSellingService;
@@ -28,9 +29,9 @@ class CartPageSubscriber implements EventSubscriberInterface
     private EntityRepositoryInterface $mediaRepository;
 
     public function __construct(
-        CrossSellingService $crossSellingService,
+        CrossSellingService       $crossSellingService,
         EntityRepositoryInterface $mediaRepository,
-        SystemConfigService $systemConfigService
+        SystemConfigService       $systemConfigService
     )
     {
         $this->crossSellingService = $crossSellingService;
@@ -59,15 +60,16 @@ class CartPageSubscriber implements EventSubscriberInterface
             return;
         }
         if ($this->systemConfigService->getBool(self::CROSS_SELLING_CONFIG, $context->getSalesChannelId())) {
-            $crossSelling = $this->crossSellingService->getCrossSellingProducts($context, $productIds);
+            $crossSelling = $this->crossSellingService->getCrossSelling($context, $productIds);
             $page->addExtension('crossSelling', $crossSelling);
         }
         if ($this->systemConfigService->getBool(self::CROSS_SELLING_BUY_AGAIN_CONFIG, $context->getSalesChannelId())) {
             $buyAgain = $this->crossSellingService->getBuyAgainProducts($context, $productIds);
             $page->addExtension('buyAgain', $buyAgain);
         }
-        if (isset($crossSelling) && isset($buyAgain)) {
-            $this->dontRepeatOnFirstPage($crossSelling, $buyAgain);
+        if ($this->systemConfigService->getBool(self::CROSS_SELLING_ALSO_BOUGHT_CONFIG, $context->getSalesChannelId())) {
+            $buyAgain = $this->crossSellingService->getAlsoBoughtProducts($context, $productIds);
+            $page->addExtension('alsoBought', $buyAgain);
         }
     }
 
@@ -81,7 +83,7 @@ class CartPageSubscriber implements EventSubscriberInterface
             return;
         }
         if ($this->systemConfigService->getBool(self::CROSS_SELLING_OFF_CANVAS_CONFIG, $context->getSalesChannelId())) {
-            $crossSelling = $this->crossSellingService->getCrossSellingProducts($context, $productIds);
+            $crossSelling = $this->crossSellingService->getCrossSelling($context, $productIds);
             $event->getPage()->addExtension('crossSelling', $crossSelling);
         }
     }
@@ -107,18 +109,5 @@ class CartPageSubscriber implements EventSubscriberInterface
             fn(LineItem $product) => $product->getReferencedId(),
             $products
         );
-    }
-
-    private static function dontRepeatOnFirstPage(EntityCollection $first, EntityCollection $second)
-    {
-        $firstPageIds = $first->slice(0, 5)->getIds();
-        $secondFirstPageIds = $second->slice(0, 5)->getIds();
-        foreach ($secondFirstPageIds as $id) {
-            if (in_array($id, $firstPageIds, true)) {
-                $entity = $second->get($id);
-                $second->remove($id);
-                $second->add($entity);
-            }
-        }
     }
 }

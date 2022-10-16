@@ -28,44 +28,85 @@ class CrossSellingService
     private EntityRepositoryInterface $productStreamRepository;
     private EntityDefinition $productDefinition;
     private SystemConfigService $systemConfigService;
+    private AlsoBoughtService $alsoBoughtService;
 
     public function __construct(
         SalesChannelRepositoryInterface $productRepository,
         EntityRepositoryInterface       $productStreamRepository,
         EntityDefinition                $productDefinition,
-        SystemConfigService             $systemConfigService
+        SystemConfigService             $systemConfigService,
+        AlsoBoughtService               $alsoBoughtService
     )
     {
         $this->productRepository = $productRepository;
         $this->productStreamRepository = $productStreamRepository;
         $this->productDefinition = $productDefinition;
         $this->systemConfigService = $systemConfigService;
+        $this->alsoBoughtService = $alsoBoughtService;
+    }
+
+    public function getCrossSelling(SalesChannelContext $context, array $productIds): ?EntityCollection
+    {
+        $result = $this->getCrossSellingProducts($context, $productIds);
+        if ($result === null) {
+            $result = $this->getCrossSellingFromStream($context, $productIds);
+        }
+        if ($result === null) {
+            $result = $this->getCrossSellingSiblings($context, $productIds);
+        }
+        return $result;
     }
 
     public function getCrossSellingProducts(SalesChannelContext $context, array $productIds): ?EntityCollection
     {
         $criteria = $this->createProductCriteria($context, $productIds);
         $this->addCrossSellingProducts($criteria, $context, $productIds);
+        return $this->searchProducts($criteria, $context);
+    }
+
+    public function getCrossSellingFromStream(SalesChannelContext $context, array $productIds): ?EntityCollection
+    {
+        $criteria = $this->createProductCriteria($context, $productIds);
+        $this->addProductStreamFilters($criteria, $productIds, $context->getContext());
+        return $this->searchProducts($criteria, $context);
+
+    }
+    public function getCrossSellingSiblings(SalesChannelContext $context, array $productIds): ?EntityCollection
+    {
+        $criteria = $this->createProductCriteria($context, $productIds);
+        $criteria->addFilter(new EqualsFilter('crossSellingAssignedProducts.crossSelling.active', true));
+        $criteria->addFilter(new EqualsAnyFilter('crossSellingAssignedProducts.crossSelling.productId', $productIds));
+        return $this->searchProducts($criteria, $context);
+    }
+
+    public function getBuyAgainProducts(SalesChannelContext $context, array $productIds): ?EntityCollection
+    {
+        if ($context->getCustomer() === null) {
+            return null;
+        }
+        $customerId = $context->getCustomer()->getId();
+        $criteria = $this->createProductCriteria($context, $productIds);
+        $criteria->addFilter(new EqualsFilter('orderLineItems.order.orderCustomer.customerId', $customerId));
+        return $this->searchProducts($criteria, $context);
+    }
+
+    public function getAlsoBoughtProducts(SalesChannelContext $context, array $productIds): ?EntityCollection
+    {
+        $ids = $this->alsoBoughtService->getAlsoBoughtProductIds($context, $productIds);
+        if (empty($ids)) {
+            return null;
+        }
+        $criteria = $this->createProductCriteria($context, $productIds);
+        $criteria->addFilter(new EqualsAnyFilter('id', $ids));
+        return $this->searchProducts($criteria, $context);
+    }
+
+    private function searchProducts(Criteria $criteria, SalesChannelContext $context): ?EntityCollection
+    {
         $result = $this->productRepository->search($criteria, $context);
-
-        if ($result->first() === null) {
-            $criteria = $this->createProductCriteria($context, $productIds);
-            $this->addProductStreamFilters($criteria, $productIds, $context->getContext());
-            $result = $this->productRepository->search($criteria, $context);
-        }
-
-        if ($result->first() === null) {
-            // getCrossSellingSiblings
-            $criteria = $this->createProductCriteria($context, $productIds);
-            $criteria->addFilter(new EqualsFilter('crossSellingAssignedProducts.crossSelling.active', true));
-            $criteria->addFilter(new EqualsAnyFilter('crossSellingAssignedProducts.crossSelling.productId', $productIds));
-            $result = $this->productRepository->search($criteria, $context);
-        }
-
         if ($result->first() === null) {
             return null;
         }
-
         return $result->getEntities();
     }
 
@@ -139,25 +180,5 @@ class CrossSellingService
             );
         }
         $criteria->addFilter(new MultiFilter(MultiFilter::CONNECTION_OR, $filters));
-    }
-
-    private static function addCustomerOrdersFilters(Criteria $criteria, SalesChannelContext $context): void
-    {
-        $customerId = $context->getCustomer()->getId();
-        $criteria->addFilter(new EqualsFilter('orderLineItems.order.orderCustomer.customerId', $customerId));
-    }
-
-    public function getBuyAgainProducts(SalesChannelContext $context, array $productIds): ?EntityCollection
-    {
-        if ($context->getCustomer() === null) {
-            return null;
-        }
-        $criteria = $this->createProductCriteria($context, $productIds);
-        $this->addCustomerOrdersFilters($criteria, $context);
-        $result = $this->productRepository->search($criteria, $context);
-        if ($result->first() === null) {
-            return null;
-        }
-        return $result->getEntities();
     }
 }
