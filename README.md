@@ -2,7 +2,7 @@
 
 Improve conversion in checkout. Adds some features in the shopware checkout.
 
-Thanks to netformic GmbH for time to create it.
+Thanks to NETFORMIC GmbH for time to create it.
 
 ## Features
 ### Cross Selling
