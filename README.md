@@ -4,6 +4,8 @@ Improve conversion in checkout. Adds some features in the shopware checkout.
 
 Thanks to NETFORMIC GmbH for time to create it.
 
+26. November: Still watching DisneyPlus.
+
 ## Features
 ### Cross Selling
 ![Cross Selling](screnshots/cross_selling.png "Cross Selling")
